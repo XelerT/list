@@ -76,15 +76,18 @@ elem_t list_delete (list_t *list, size_t position)
 {
         assert(list && "Null list");
 
+        data_t *data = list->data;
+        data_t *free = list->free;
         elem_t deleted = 0;
         if (position < list->capacity) {
-                list->data[list->data[position].prev].next = list->data[position].next;
-                list->data[list->data[position].next].prev = list->data[position].prev;
-                deleted = list->data[position].data;
-                list->data[position].data = FREE_ELEM;
-                list->data[position].next = list->free - list->data;
-                list->data[position].prev = 0;
-                list->free = list->data + position;
+                deleted = data[position].data;
+                data[position].data = FREE_ELEM;
+                data[data[position].next].prev = data[position].prev;
+                data[data[position].prev].next = data[position].next;
+                data[position].next = free - data;
+                data[position].prev = free->prev;
+                free->prev = position;
+                list->free = data + position;
 
                 return deleted;
         }
@@ -101,8 +104,6 @@ int list_dtor (list_t *list)
 
         return NULL_DATA_PTR;
 }
-
-// linearize
 
 int list_linearize (list_t *list)
 {

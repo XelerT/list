@@ -16,39 +16,39 @@ node1 [label = "indx 1
  next  2"];
 node2 [label = "indx 2 
  prev 1 
- 11 
+ 12 
  next  3"];
 node3 [label = "indx 3 
  prev 2 
- 12 
+ 13 
  next  4"];
 node4 [label = "indx 4 
  prev 3 
- 13 
+ 14 
  next  5"];
 node5 [label = "indx 5 
  prev 4 
- 14 
+ 666 
  next  6"];
 node6 [label = "indx 6 
  prev 5 
- 666 
+ 15 
  next  7"];
 node7 [label = "indx 7 
  prev 6 
- 15 
+ 16 
  next  8"];
 node8 [label = "indx 8 
  prev 7 
- 16 
+ 17 
  next  9"];
 node9 [label = "indx 9 
  prev 8 
- 17 
+ 18 
  next  10"];
 node10 [label = "indx 10 
  prev 9 
- 18 
+ 19 
  next  11"];
 
 node[shape = "rectangle", style = "rounded, filled",                 		           
@@ -59,7 +59,7 @@ penwidth = 5, color = "black"
 ]
 node11 [label = "indx 11 
  prev 10 
- 19 
+ 0 
  next 0"];
 node12 [label = "indx 12 
  prev 11 

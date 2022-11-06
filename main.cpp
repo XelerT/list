@@ -22,6 +22,7 @@ int main ()
                 list_insert(&list, i + 10, i);
         }
         list_insert(&list, 666, 5);
+        list_delete(&list, 2);
 
         // for (int i = 0; i < 5; i++;)
         //         list_delete(&list, i);
