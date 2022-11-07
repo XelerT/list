@@ -27,7 +27,7 @@ static char *list_errors[] = {
         "List has zero capacity."
 };
 
-int list_dump (list_t *list, const char *file_name, const char *func, const int line, const char *list_name, FILE *log)
+int list_dump (list_t *list, const char *file_name, const char *func, const int line, const char *list_name, FILE *log, const char *img)
 {
         assert(list);
         assert(log);
@@ -53,6 +53,8 @@ int list_dump (list_t *list, const char *file_name, const char *func, const int 
                         for (size_t i = 0; i < list->capacity; i++) {
                                 fprintf(log, "%lld) %5lld %5d %5lld\n", i, list->data[i].prev, list->data[i].data, list->data[i].next);
                         }
+                        paste_img(log, img);
+
                         fprintf(log, "<p style=\"color:red;\">%s<\/p></pre>\n", list_errors[i]);
                         return NULL_FREE_PTR;
                 case NULL_CAPACITY:

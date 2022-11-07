@@ -3,7 +3,8 @@
 #include "logs\dump.h"
 #include "logs\log.h"
 
-#define list_dump(list,html_log) list_dump(&list, __FILE__,  __PRETTY_FUNCTION__, __LINE__, #list, html_log)
+#define list_dump(list,html_log,graph_path) list_dump(&list, __FILE__,  __PRETTY_FUNCTION__,                    \
+                                                      __LINE__, #list, html_log, #graph_path)
 
 int main ()
 {
@@ -17,7 +18,7 @@ int main ()
         FILE *html_log  = fopen("logs\\log.html", "w");
 
         int error = 0;
-        if (error = list_dump(list, html_log))
+        if (error = list_dump(list, html_log, C:\\Users\\taran\\Desktop\\X course\\List\\graph.png))
                 return error;
 
         for (int i = 0; i < 10; i++) {
@@ -29,13 +30,13 @@ int main ()
         // for (int i = 0; i < 5; i++;)
         //         list_delete(&list, i);
 
-        if (error = list_dump(list, html_log))
+        if (error = list_dump(list, html_log, C:\\Users\\taran\\Desktop\\X course\\List\\graph.png))
                 return error;
 
         // list_graph_dump(&list, log_graph);
 
         list_linearize(&list);
-        if (error = list_dump(list, html_log))
+        if (error = list_dump(list, html_log, C:\\Users\\taran\\Desktop\\X course\\List\\graph.png))
                 return error;
         list_graph_dump(&list, log_graph);
         fclose(log);
