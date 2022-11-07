@@ -20,17 +20,67 @@
 //
 // dump_node();
 
-void list_dump (list_t *list, const char *file_name, const char *func, const int line, const char *list_name, FILE *log)
+static char *list_errors[] = {
+        "List pointer is null.",
+        "Data pointer in list is null.",
+        "Pointer on the free element in list is null.",
+        "List has zero capacity."
+};
+
+int list_dump (list_t *list, const char *file_name, const char *func, const int line, const char *list_name, FILE *log)
 {
         assert(list);
         assert(log);
 
-        fprintf(log, "Name of the file: %s\nName of the function: %s \
-                        \nLine: %d\nName of the list: %s\n", file_name, func, line, list_name);
-        fprintf(log, "    prev | data | next\n");
-        for (int i = 0; i < list->capacity; i++) {
-                fprintf(log, "%d) %5lld %5d %5lld\n", i, list->data[i].prev, list->data[i].data, list->data[i].next);
+        int errors = list_error(list);
+        fprintf(log, "<pre>\n");
+
+        if (!errors)
+                return 0;
+
+        for (int i = 0; (errors << i) != 0; i++) {
+                switch (errors & ~(~0 << i + 1)) {                                                                      //1111 1111
+                case NULL_LIST_PTR:                                                                                     //1111 1100
+                        fprintf(log, "<p style=\"color:red;\">%s<\/p></pre>\n", list_errors[i]);                            //0000 0011
+                        return NULL_LIST_PTR;                                                                          //&0000 1010
+                case NULL_DATA_PTR:                                                                                     //0000 0010
+                        fprintf(log, "<p style=\"color:red;\">%s<\/p></pre>\n", list_errors[i]);
+                        return NULL_DATA_PTR;
+                case NULL_FREE_PTR:
+                        fprintf(log, "Name of the file: %s\nName of the function: %s \
+                                \nLine: %d\nName of the list: %s\n", file_name, func, line, list_name);
+                        fprintf(log, "    prev | data | next\n");
+                        for (size_t i = 0; i < list->capacity; i++) {
+                                fprintf(log, "%lld) %5lld %5d %5lld\n", i, list->data[i].prev, list->data[i].data, list->data[i].next);
+                        }
+                        fprintf(log, "<p style=\"color:red;\">%s<\/p></pre>\n", list_errors[i]);
+                        return NULL_FREE_PTR;
+                case NULL_CAPACITY:
+                        fprintf(log, "<p style=\"color:red;\">%s<\/p>\n", list_errors[i]);
+                        break;
+                }
         }
+
+        fprintf(log, "</pre>\n");
+
+        return errors;
+}
+
+int list_error (list_t *list)
+{
+        int errors = 0;
+        if (list == nullptr) {
+                errors |= NULL_LIST_PTR;
+        } else {
+                if (list->data == nullptr)
+                        errors |= NULL_DATA_PTR;
+                if (list->free == nullptr)
+                        errors |= NULL_FREE_PTR;
+                if (list->capacity == 0)
+                        errors |= NULL_CAPACITY;
+        }
+
+        return errors;
 }
 
 void list_graph_dump (list_t *list, FILE *log_file)
@@ -49,7 +99,7 @@ void list_graph_dump (list_t *list, FILE *log_file)
 
         fprintf(log_file, "\n{rank = same;\n");
         for (size_t i = 0; i < list->size; i++) {
-                fprintf(log_file, "node%lld [label = \"indx %d \n prev %lld \n %d \n next  %lld\"];\n",
+                fprintf(log_file, "node%lld [label = \"indx %lld \n prev %lld \n %d \n next  %lld\"];\n",
                         i, i, list->data[i].prev, list->data[i].data, list->data[i].next);
         }
 
@@ -60,7 +110,7 @@ void list_graph_dump (list_t *list, FILE *log_file)
 		           \npenwidth = 5, color = \"black\"                                          \
 		           \n]\n");
         for (size_t i = list->size; i < list->capacity; i++) {
-                fprintf(log_file, "node%lld [label = \"indx %d \n prev %lld \n %d \n next %lld\"];\n",
+                fprintf(log_file, "node%lld [label = \"indx %lld \n prev %lld \n %d \n next %lld\"];\n",
                         i, i, list->data[i].prev, list->data[i].data, list->data[i].next);
         }
         fprintf(log_file, "}\n");

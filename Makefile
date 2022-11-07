@@ -44,16 +44,17 @@ CFLAGS= -Wshadow    			\
 	-D_EJUDGE_CLIENT_SIDE
 
 all:
-	g++ -o $(OUTPUT) $(CFLAGS) $(CFILES)
+	@ g++ -o $(OUTPUT) $(CFLAGS) $(CFILES)
 
 run:
-	a.exe
+	@ a.exe
+	@ echo Run List
 
 .PHONY: clean
 clean:
-	rm -f $(OUTPUT)
+	@ rm -f $(OUTPUT)
 clean_cmd:
-	cls
+	@ cls
 
 graphviz:
-	dot -T $(IMG_FORMAT) -o graph.$(IMG_FORMAT) $(DOT_FILE_NAME)
+	@ dot -T $(IMG_FORMAT) -o graph.$(IMG_FORMAT) $(DOT_FILE_NAME)

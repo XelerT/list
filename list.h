@@ -11,7 +11,7 @@ enum list {
 };
 
 enum errors {
-        NULL_DATA_PTR  = -1,
+        //NULL_DATA_PTR  = -1,
         NULL_NEXT_PTR  = -2,
         NULL_PREV_PTR  = -3,
         NO_SIZE        = -4,
@@ -34,7 +34,6 @@ struct list_t {
 };
 
 int list_ctor (list_t *list, int capacity);
-static size_t fill_free (list_t *list, size_t position);
 int list_insert (list_t *list, elem_t val, size_t position);
 elem_t list_delete (list_t *list, size_t position);
 int list_dtor (list_t *list);

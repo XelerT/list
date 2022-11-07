@@ -3,7 +3,7 @@
 #include "logs\dump.h"
 #include "logs\log.h"
 
-#define list_dump(list,log) list_dump(&list, __FILE__,  __PRETTY_FUNCTION__, __LINE__, #list, log)
+#define list_dump(list,html_log) list_dump(&list, __FILE__,  __PRETTY_FUNCTION__, __LINE__, #list, html_log)
 
 int main ()
 {
@@ -16,7 +16,9 @@ int main ()
         FILE *log_graph = fopen("logs\\log_graph.dot", "w");
         FILE *html_log  = fopen("logs\\log.html", "w");
 
-        list_dump(list, log);
+        int error = 0;
+        if (error = list_dump(list, html_log))
+                return error;
 
         for (int i = 0; i < 10; i++) {
                 list_insert(&list, i + 10, i);
@@ -27,17 +29,20 @@ int main ()
         // for (int i = 0; i < 5; i++;)
         //         list_delete(&list, i);
 
-        list_dump(list, log);
+        if (error = list_dump(list, html_log))
+                return error;
 
         // list_graph_dump(&list, log_graph);
 
         list_linearize(&list);
-        list_dump(list, log);
+        if (error = list_dump(list, html_log))
+                return error;
         list_graph_dump(&list, log_graph);
         fclose(log);
         fclose(log_graph);
-        log = fopen("logs\\log.txt", "r");
-        create_html(html_log, log, "C:\\Users\\taran\\Desktop\\X course\\List\\graph.png");
+        //log = fopen("logs\\log.txt", "r");
+        //create_html(html_log, log, "C:\\Users\\taran\\Desktop\\X course\\List\\graph.png");
+        paste_img(html_log, "C:\\Users\\taran\\Desktop\\X course\\List\\graph.png");
         fclose(html_log);
         if (list_dtor(&list))
                 return NULL_DATA_PTR;

@@ -1,11 +1,13 @@
  #include "list.h"
 
+static size_t fill_free (list_t *list, size_t position);
+
 int list_ctor (list_t *list, int capacity)
 {
         list->capacity = capacity;
         list->data = (data_t *)calloc(list->capacity, sizeof(data_t));
         if (!list->data)
-                return NULL_DATA_PTR;
+                return /*NULL_DATA_PTR*/ 0xBADDADA;
 
         list->free = list->data + 1;
         list->size = 0;
@@ -64,7 +66,7 @@ int list_resize (list_t *list, double coeff)
         assert(list);
 
         list_t *temp_list = list;
-        temp_list = (list_t*) realloc(list, list->capacity * coeff);
+        temp_list = (list_t*) realloc(list, (size_t) ((double) list->capacity * coeff));
         if (temp_list == nullptr)
                 return RESIZE_ERR;
         list = temp_list;
@@ -102,7 +104,7 @@ int list_dtor (list_t *list)
                 return 0;
         }
 
-        return NULL_DATA_PTR;
+        return /*NULL_DATA_PTR*/ 0xBADDADA;
 }
 
 int list_linearize (list_t *list)

@@ -9,7 +9,7 @@ struct logs_t {
         char *log_file_path = nullptr;
         FILE *log_file      = nullptr;
         char *buf           = nullptr;
-        size_t n_chars      = 0;
+        size_t n_chars      =       0;
 };
 
 enum log_errors {
@@ -18,7 +18,6 @@ enum log_errors {
         NULL_IMG_PTR    = -3
 };
 
-int create_html (FILE *html_logs, FILE *log_file, const char *img);
-void get_log (logs_t *logs);
+void paste_img (FILE *html_logs, const char *img);
 
 #endif /*LOG_H*/
