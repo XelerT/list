@@ -1,4 +1,5 @@
  #include "list.h"
+ #include "logs\dump.h"
 
 static size_t fill_free (list_t *list, size_t position);
 
@@ -7,7 +8,7 @@ int list_ctor (list_t *list, int capacity)
         list->capacity = capacity;
         list->data = (data_t *)calloc(list->capacity, sizeof(data_t));
         if (!list->data)
-                return /*NULL_DATA_PTR*/ 0xBADDADA;
+                return NULL_CALLOC;
 
         list->free = list->data + 1;
         list->size = 0;
@@ -43,7 +44,7 @@ int list_insert (list_t *list, elem_t val, size_t position)
         size_t new_free = free->next;
 
         if (list->size >= list->capacity)
-                if (list_resize(list, 1.2))
+                if (list_resize(list, 2))
                         return RESIZE_ERR;
 
         *free = {
@@ -52,24 +53,25 @@ int list_insert (list_t *list, elem_t val, size_t position)
                 .prev = position,
         };
 
-        data[position].next = free - data;
+        data[position].next   = free - data;
         data[free->next].prev = free - data;
-        list->free = data + new_free;
+
+        list->free       = data + new_free;
         list->free->prev = free - data;
         list->size++;
 
         return 0;
 }
 
-int list_resize (list_t *list, double coeff)
+int list_resize (list_t *list, size_t coeff)
 {
         assert(list);
 
-        list_t *temp_list = list;
-        temp_list = (list_t*) realloc(list, (size_t) ((double) list->capacity * coeff));
+        list_t *temp_list = (list_t *)realloc(list, list->capacity * coeff);
         if (temp_list == nullptr)
                 return RESIZE_ERR;
         list = temp_list;
+        list->capacity = list->capacity * coeff;
 
         return 0;
 }
@@ -83,15 +85,20 @@ elem_t list_delete (list_t *list, size_t position)
         elem_t deleted = 0;
         if (position < list->capacity) {
                 deleted = data[position].data;
+
                 data[position].data = FREE_ELEM;
                 data[data[position].next].prev = data[position].prev;
                 data[data[position].prev].next = data[position].next;
+
                 data[position].next = free - data;
                 data[position].prev = free->prev;
+
                 free->prev = position;
                 list->free = data + position;
 
                 return deleted;
+        } else {
+                fprintf(stderr, "Position is greater than list capacity. Func: %s\n", __PRETTY_FUNCTION__);
         }
 
         return 0;
@@ -104,24 +111,25 @@ int list_dtor (list_t *list)
                 return 0;
         }
 
-        return /*NULL_DATA_PTR*/ 0xBADDADA;
+        return NULL_LIST_PTR;
 }
 
 int list_linearize (list_t *list)
 {
+        // Without calloc???????
         data_t *new_data_ptr = (data_t *) calloc(list->capacity, sizeof(data_t));
         if (new_data_ptr == nullptr)
                 return NULL_CALLOC;
-        size_t i = 1;
-        // new_data_ptr->next = 1;
+
+        size_t i = 0;
         size_t next_elem = list->data[0].next;
-        for (; i < list->size + 1; i++) {
-                // printf("%d\n", list->data[list->data[i - 1].next].data);
+        for (i = 1; i < list->size + 1; i++) {
                 new_data_ptr[i].data = list->data[next_elem].data;
                 next_elem = list->data[next_elem].next;
                 new_data_ptr[i].prev = i - 1;
                 new_data_ptr[i - 1].next = i;
         }
+
         new_data_ptr[i].data = list->data[next_elem].data;
         new_data_ptr[i].next = 0;
         new_data_ptr->prev = i - 1;

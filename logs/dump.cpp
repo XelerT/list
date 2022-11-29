@@ -1,42 +1,20 @@
 #include "dump.h"
 
-// отображеніе graphviz -> C
-// struct attibute_t {
-//         const char *;
-// };
-//
-// struct atributes_t {
-//         const char *color;
-//         const char *shape;
-// }
-//
-// struct node_t {
-//         attribute_t *attributes;
-//         node_t *next;
-// };
-//
-// struct edge_t
-// struct graph_t
-//
-// dump_node();
-
-static char *list_errors[] = {
-        "List pointer is null.",
-        "Data pointer in list is null.",
-        "Pointer on the free element in list is null.",
-        "List has zero capacity."
-};
-
-int list_dump (list_t *list, const char *file_name, const char *func, const int line, const char *list_name, FILE *log, const char *img)
+int list_dump (list_t *list, const char *file_name, const char *func, const int line,
+               const char *list_name, FILE *log, const char *img)
 {
         assert(list);
         assert(log);
 
+        static char *list_errors[] = {
+                "List pointer is null.",
+                "Data pointer in list is null.",
+                "Pointer on the free element in list is null.",
+                "List has zero capacity."
+        };
+
         int errors = list_error(list);
         fprintf(log, "<pre>\n");
-
-        if (!errors)
-                return 0;
 
         for (int i = 0; (errors << i) != 0; i++) {
                 switch (errors & ~(~0 << i + 1)) {                                                                      //1111 1111

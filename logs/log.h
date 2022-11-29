@@ -15,7 +15,8 @@ struct logs_t {
 enum log_errors {
         NULL_OUTPUT_PTR = -1,
         NULL_INPUT_PTR  = -2,
-        NULL_IMG_PTR    = -3
+        NULL_IMG_PTR    = -3,
+        NULL_LOG_FILE   = -4
 };
 
 void paste_img (FILE *html_logs, const char *img);

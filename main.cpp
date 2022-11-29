@@ -13,17 +13,21 @@ int main ()
         if (list_ctor(&list, capacity))
                 return NULL_DATA_PTR;
 
-        FILE *log       = fopen("logs\\log.txt", "w");
+        FILE *log       = fopen("logs\\log.txt",       "w");
         FILE *log_graph = fopen("logs\\log_graph.dot", "w");
-        FILE *html_log  = fopen("logs\\log.html", "w");
+        FILE *html_log  = fopen("logs\\log.html",      "w");
+        if (!log)
+                return NULL_LOG_FILE;
 
         int error = 0;
         if (error = list_dump(list, html_log, C:\\Users\\taran\\Desktop\\X course\\List\\graph.png))
                 return error;
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
+                // printf("%d\n",  list_insert(&list, i + 10, i));
                 list_insert(&list, i + 10, i);
         }
+        list_delete(&list, 1);
         list_insert(&list, 666, 5);
         list_delete(&list, 2);
 

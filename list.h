@@ -11,7 +11,7 @@ enum list {
 };
 
 enum errors {
-        //NULL_DATA_PTR  = -1,
+        // NULL_LIST_PTR  =  0xBADDADA,
         NULL_NEXT_PTR  = -2,
         NULL_PREV_PTR  = -3,
         NO_SIZE        = -4,
@@ -37,7 +37,7 @@ int list_ctor (list_t *list, int capacity);
 int list_insert (list_t *list, elem_t val, size_t position);
 elem_t list_delete (list_t *list, size_t position);
 int list_dtor (list_t *list);
-int list_resize (list_t *list, double coeff);
+int list_resize (list_t *list, size_t coeff);
 int list_linearize (list_t *list);
 
 #endif /*LIST_H*/
